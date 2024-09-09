@@ -1,7 +1,5 @@
 package com.accountability_notification_system.accountability_notification_system.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,17 +21,20 @@ public class User {
     
     private String val_tag;
 
+    private Integer match_count;
+
     private String number;
 
     private String acc_partner_number;
 
     public User() {}
 
-    public User(String email, String name, String val_user, String val_tag, String number, String acc_partner_number) {
+    public User(String email, String name, String val_user, String val_tag, Integer match_count, String number, String acc_partner_number) {
         this.email = email;
         this.name = name;
         this.val_user = val_user;
         this.val_tag = val_tag;
+        this.match_count = match_count;
         this.number = number;
         this.acc_partner_number = acc_partner_number;
     }
@@ -72,6 +73,14 @@ public class User {
 
     public void setValtag(String new_val_tag) {
         this.val_tag = new_val_tag;
+    }
+
+    public Integer getMatchCount() {
+        return this.match_count;
+    }
+
+    public void setMatchCount(Integer new_match_count) {
+        this.match_count = new_match_count;
     }
 
     public String getNumber() {
