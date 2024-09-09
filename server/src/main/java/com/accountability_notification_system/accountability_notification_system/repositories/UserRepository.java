@@ -1,0 +1,3 @@
+package com.accountability_notification_system.accountability_notification_system.repositories;
+import com.accountability_notification_system.accountability_notification_system.model.User;
+public interface UserRepository extends CrudRepository<User, Integer> {}
