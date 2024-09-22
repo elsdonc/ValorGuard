@@ -5,6 +5,7 @@ import LandingPage from "./pages/LandingPage";
 
 function App() {
   const [user, setUser] = useState(null);
+  const userEndpoint = "http://localhost:8080/api/user";
 
   useEffect(() => {
     fetchUser();
@@ -35,7 +36,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage handleSignIn={handleGoogleSignIn} user={user}/>} />
       </Routes>
     </>
   );
