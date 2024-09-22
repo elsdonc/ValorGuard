@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { Routes, Route } from 'react-router-dom';
 import "./App.css";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,8 +31,14 @@ function App() {
   const handleGoogleSignIn = async () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
-  
-  return <></>;
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+    </>
+  );
 }
 
 export default App;
