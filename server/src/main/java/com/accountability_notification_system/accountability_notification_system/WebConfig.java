@@ -35,7 +35,7 @@ public class WebConfig implements WebMvcConfigurer{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/oauth2/**", "/login/**").permitAll()
+                .requestMatchers("/oauth2/**", "/api/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
