@@ -1,34 +1,31 @@
-import { useState, useEffect } from "react";
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [user, setUser] = useState(null);
-  const userEndpoint = "http://localhost:8080/api/user";
 
   useEffect(() => {
-    fetchUser();
-    if (user) {
-      console.log("logged in");
-      window.location.href = "http://localhost:5173/dashboard";
-    }
+    getUser();
   }, []);
 
-  const fetchUser = async () => {
-    console.log("Fetching user");
+  const getUser = async () => {
     try {
-      let response = await fetch(userEndpoint, {
-        method: "GET",
-        credentials: "include",
-      });
-      response = await response.json();
-      setUser(response["name"]);
-    } catch (err) {
-      console.error(err);
+        let res = await fetch("http://localhost:8080/api/user", {
+            method: "GET",
+            credentials: "include"
+        });
+        let data = await res.json();
+        if (data["name"] != null) {
+          setUser(data["name"])
+        }
+    } catch (e) {
+        res.error(e);
     }
   };
-
+  
   const handleGoogleSignIn = async () => {
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
@@ -36,7 +33,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage handleSignIn={handleGoogleSignIn} user={user}/>} />
+        <Route
+          path="/"
+          element={
+            <LandingPage handleSignIn={handleGoogleSignIn} user={user} />
+          }
+        />
+        <Route path="/dashboard" element={<Dashboard user={user}/>}/>
       </Routes>
     </>
   );
