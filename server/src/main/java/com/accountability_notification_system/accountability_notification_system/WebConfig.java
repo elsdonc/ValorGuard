@@ -1,43 +1,48 @@
 package com.accountability_notification_system.accountability_notification_system;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.accountability_notification_system.accountability_notification_system.model.User;
 import com.accountability_notification_system.accountability_notification_system.repositories.UserRepository;
 
 @Configuration
-@EnableWebSecurity
-public class WebConfig implements WebMvcConfigurer{
+public class WebConfig {
 
     @Autowired
     private UserRepository userRepository;
-    
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173")
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-            .allowedHeaders("*")
-            .allowCredentials(true);
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/oauth2/**", "/api/**").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .cors(c -> c.configurationSource(corsConfigurationSource()))
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oauth2AuthenticationSuccessHandler())
             ).sessionManagement(session -> session
@@ -66,7 +71,7 @@ public class WebConfig implements WebMvcConfigurer{
                 }
             );
 
-            response.sendRedirect("http://localhost:5173");
+            response.sendRedirect("http://localhost:5173/dashboard");
         };
     }
 
