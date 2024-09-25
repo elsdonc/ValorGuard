@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 const Dashboard = ({ user }) => {
-  const [valorantUsername, setValorantUsername] = useState('');
-  const [tag, setTag] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [partnerPhoneNumber, setPartnerPhoneNumber] = useState('');
+  const [valUser, setValUser] = useState('');
+  const [valTag, setValTag] = useState('');
+  const [number, setNumber] = useState('');
+  const [accPartnerNumber, setAccPartnerNumber] = useState('');
   const [isEditable, setIsEditable] = useState(false);
 
   const handleSubmit = (e) => {
@@ -25,8 +25,8 @@ const Dashboard = ({ user }) => {
             Valorant Username:
             <input
               type="text"
-              value={valorantUsername}
-              onChange={(e) => setValorantUsername(e.target.value)}
+              value={valUser}
+              onChange={(e) => setValUser(e.target.value)}
               disabled={!isEditable}
               required
             />
@@ -37,8 +37,8 @@ const Dashboard = ({ user }) => {
             Tag (e.g. #1234):
             <input
               type="text"
-              value={tag}
-              onChange={(e) => setTag(e.target.value)}
+              value={valTag}
+              onChange={(e) => setValTag(e.target.value)}
               disabled={!isEditable}
               required
             />
@@ -49,8 +49,8 @@ const Dashboard = ({ user }) => {
             Phone Number:
             <input
               type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
               disabled={!isEditable}
               required
             />
@@ -61,8 +61,8 @@ const Dashboard = ({ user }) => {
             Accountability Partner's Phone Number:
             <input
               type="tel"
-              value={partnerPhoneNumber}
-              onChange={(e) => setPartnerPhoneNumber(e.target.value)}
+              value={accPartnerNumber}
+              onChange={(e) => setAccPartnerNumber(e.target.value)}
               disabled={!isEditable}
               required
             />
