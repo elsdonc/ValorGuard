@@ -58,18 +58,13 @@ public class WebConfig {
             String email = oauthToken.getPrincipal().getAttribute("email");
             String name = oauthToken.getPrincipal().getAttribute("name");
 
-            userRepository.findByEmail(email).ifPresentOrElse(
-                user -> {
-                    // User exists, handle accordingly if needed
-                },
-                () -> {
-                    // User does not exist, so save them
-                    User newUser = new User();
-                    newUser.setEmail(email);
-                    newUser.setName(name);
-                    userRepository.save(newUser);
-                }
-            );
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                User newUser = new User();
+                newUser.setEmail(email);
+                newUser.setName(name);
+                userRepository.save(newUser);
+            }
 
             response.sendRedirect("http://localhost:5173/dashboard");
         };
