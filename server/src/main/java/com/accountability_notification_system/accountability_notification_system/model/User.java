@@ -71,7 +71,7 @@ public class User {
         return this.val_tag;
     }
 
-    public void setValtag(String new_val_tag) {
+    public void setValTag(String new_val_tag) {
         this.val_tag = new_val_tag;
     }
 
