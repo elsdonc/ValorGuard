@@ -27,16 +27,8 @@ public class User {
 
     private String acc_partner_number;
 
-    public User() {}
-
-    public User(String email, String name, String val_user, String val_tag, Integer match_count, String number, String acc_partner_number) {
-        this.email = email;
-        this.name = name;
-        this.val_user = val_user;
-        this.val_tag = val_tag;
-        this.match_count = match_count;
-        this.number = number;
-        this.acc_partner_number = acc_partner_number;
+    public User() {
+        this.match_count = 0;
     }
 
     public Integer getId() {
