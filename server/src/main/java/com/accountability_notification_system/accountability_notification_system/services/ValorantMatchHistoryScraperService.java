@@ -7,19 +7,24 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Service;
 
+import com.accountability_notification_system.accountability_notification_system.exceptions.UserNotFoundException;
+import com.accountability_notification_system.accountability_notification_system.model.User;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.time.Duration;
 
 @Service
 public class ValorantMatchHistoryScraperService {
+    
     private static WebDriver driver;
 
-    public static boolean checkHistory() throws Exception {
+    // this function checks current match 
+    public static boolean checkHistory(User user) throws UserNotFoundException {
         boolean activeToday = false;
-        // TODO: get username and tag from database
-        String username = "Dog";
+        int currentMatchCount = user.getMatchCount();
+        String username = user.getValUser();
+        String tag = user.getValTag();
         String connector = "%23";
-        String tag = "5278";
         String url = String.format("https://tracker.gg/valorant/profile/riot/%s%s%s/overview?season=all", username, connector, tag);
         // scrape from tracker.gg
         WebDriverManager.chromedriver().setup();
@@ -30,12 +35,12 @@ public class ValorantMatchHistoryScraperService {
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("matches")));
             WebElement element1 = driver.findElement(By.className("matches"));
             int newMatchCount = Integer.parseInt(element1.getText().split(" ")[0]);
-            // TODO: get user's match count from database
-            int matchCount = 0;
-            if (newMatchCount > matchCount) {
+            if (newMatchCount > currentMatchCount) {
                 activeToday = true;
-                // TODO: set matchCount to new match count in database
+                user.setMatchCount(newMatchCount);
             }
+        } catch (Exception e) {
+            throw new UserNotFoundException("User not found, or you don't have an account on tracker.gg");
         } finally {
             driver.quit();
         }
