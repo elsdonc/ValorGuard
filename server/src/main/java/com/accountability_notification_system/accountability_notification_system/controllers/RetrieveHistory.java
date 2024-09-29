@@ -1,17 +1,27 @@
 package com.accountability_notification_system.accountability_notification_system.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accountability_notification_system.accountability_notification_system.model.User;
+import com.accountability_notification_system.accountability_notification_system.repositories.UserRepository;
 import com.accountability_notification_system.accountability_notification_system.services.ValorantMatchHistoryScraperService;
 
 @RestController
 @RequestMapping("/api")
 public class RetrieveHistory {
+
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/history")
-    public boolean getHistory() throws Exception {
+    public boolean getHistory(@AuthenticationPrincipal OAuth2User oAuth2User) throws Exception {
+        User user = userRepository.findByEmail(oAuth2User.getAttribute("email"));
         // TODO: trigger sms message to accountability partner if checkHistory() returns true
-        return ValorantMatchHistoryScraperService.checkHistory();
+        return ValorantMatchHistoryScraperService.checkHistory(user);
     }
 }
