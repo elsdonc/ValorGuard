@@ -28,7 +28,7 @@ public class WebConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
         configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin"));
+        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-Type"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -42,11 +42,12 @@ public class WebConfig {
                 .requestMatchers("/oauth2/**").permitAll()
                 .anyRequest().authenticated()
             )
+            .csrf().disable()
             .cors(c -> c.configurationSource(corsConfigurationSource()))
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oauth2AuthenticationSuccessHandler())
             ).sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             );
         return http.build();
     }
