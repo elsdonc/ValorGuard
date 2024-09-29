@@ -1,9 +1,6 @@
 import React from "react";
 
-function LandingPage({ handleSignIn, user }) {
-  if (user != null) {
-    window.location = "/dashboard";
-  }
+function LandingPage({ handleSignIn }) {
   return (
     <div>
       <h1 className={"headline"}>Reclaim Your Time</h1>
