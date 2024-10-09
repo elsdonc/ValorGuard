@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.accountability_notification_system.accountability_notification_system.model.User;
 import com.accountability_notification_system.accountability_notification_system.repositories.UserRepository;
+import com.accountability_notification_system.accountability_notification_system.services.NotificationService;
 import com.accountability_notification_system.accountability_notification_system.services.ValorantMatchHistoryScraperService;
 
 @RestController
@@ -16,12 +17,19 @@ import com.accountability_notification_system.accountability_notification_system
 public class RetrieveHistory {
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/history")
     public boolean getHistory(@AuthenticationPrincipal OAuth2User oAuth2User) throws Exception {
         User user = userRepository.findByEmail(oAuth2User.getAttribute("email"));
-        // TODO: trigger sms message to accountability partner if checkHistory() returns true
-        return ValorantMatchHistoryScraperService.checkHistory(user);
+        boolean played = ValorantMatchHistoryScraperService.checkHistory(user);
+        System.out.println(played);
+        if (played) {
+            notificationService.notify();
+        }
+        return played;
     }
 }
