@@ -18,7 +18,7 @@ public class ValorantMatchHistoryScraperService {
     
     private static WebDriver driver;
 
-    // this function checks current match 
+    // this function checks current match count
     public static boolean checkHistory(User user) throws UserNotFoundException {
         boolean activeToday = false;
         int currentMatchCount = user.getMatchCount();
@@ -36,7 +36,9 @@ public class ValorantMatchHistoryScraperService {
             WebElement element1 = driver.findElement(By.className("matches"));
             int newMatchCount = Integer.parseInt(element1.getText().split(" ")[0]);
             if (newMatchCount > currentMatchCount) {
-                activeToday = true;
+                if (currentMatchCount != 0) {
+                    activeToday = true;
+                }
                 user.setMatchCount(newMatchCount);
             }
         } catch (Exception e) {
