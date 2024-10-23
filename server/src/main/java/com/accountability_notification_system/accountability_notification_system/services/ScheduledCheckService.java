@@ -15,12 +15,17 @@ public class ScheduledCheckService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Value("${user.email}")
     private String userEmail;
     
     @Scheduled(fixedDelay = 3600000)
     public void scheduledCheck() throws Exception {
         User user = userRepository.findByEmail(userEmail);
-        ValorantMatchHistoryScraperService.checkHistory(user);
+        if (ValorantMatchHistoryScraperService.checkHistory(user)) {
+            notificationService.notify();
+        }
     }
 }
